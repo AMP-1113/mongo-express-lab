@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cartItemsRoutes from './routes/cart-items';
+import productsRoutes from './routes/products';
 
 // creates an Express application - allows us to create and and use APIs
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 
 //use the the router object (and all it's defined routes)
 app.use("/cart-items", cartItemsRoutes);
+app.use("/", productsRoutes)
 
 // define the port
 const port = 3000;

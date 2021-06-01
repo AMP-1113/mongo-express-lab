@@ -34,7 +34,7 @@ route.get("/:id", async (req, res) => {
   }
 });
 
-// 3. PUT /cart-items
+// 3. POST /cart-items
 route.post("/", async (req, res) => {
   const item = req.body as CartItem;
   try {
@@ -84,6 +84,8 @@ route.delete("/:id", async (req, res) => {
     res.status(500).json({message: "Internal Server Error"});
   }
 });
+
+
 
 
 export default route;
