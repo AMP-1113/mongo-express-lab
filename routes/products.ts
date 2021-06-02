@@ -38,7 +38,8 @@ route.get("/products/highest-price", async (req, res) => {
         {$group: {
           _id: "$product",
           Total_Revenue: { $sum: { $multiply: [ "$price", "$quantity" ] } }
-        }}
+        }},
+        {$sort: {Total_Revenue: -1}},
       ]).toArray();
       res.json(results); // send JSON results
     } catch (err) {
