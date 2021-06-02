@@ -10,7 +10,36 @@ const route = express.Router();
 route.get("/products/highest-price", async (req, res) => {
     try {
       const client = await getClient();
-      const results = await client.db().collection<CartItem>('cartItems').find({$sort: {"$price": 1}}).toArray();
+      const results = await client.db().collection<CartItem>('cartItems').find().sort({price: -1}).limit(1).toArray();
+      res.json(results); // send JSON results
+    } catch (err) {
+      console.error("FAIL", err);
+      res.status(500).json({message: "Internal Server Error"});
+    }
+  });
+
+  // 5 best selling
+  route.get("/products/best-selling", async (req, res) => {
+    try {
+      const client = await getClient();
+      const results = await client.db().collection<CartItem>('cartItems').find().sort({quantity: -1}).limit(5).toArray();
+      res.json(results); // send JSON results
+    } catch (err) {
+      console.error("FAIL", err);
+      res.status(500).json({message: "Internal Server Error"});
+    }
+  });
+
+  // best revenue
+  route.get("/products/best-revenue", async (req, res) => {
+    try {
+      const client = await getClient();
+      const results = await client.db().collection<CartItem>('cartItems').aggregate([
+        {$group: {
+          _id: "$product",
+          Total_Revenue: { $sum: { $multiply: [ "$price", "$quantity" ] } }
+        }}
+      ]).toArray();
       res.json(results); // send JSON results
     } catch (err) {
       console.error("FAIL", err);
